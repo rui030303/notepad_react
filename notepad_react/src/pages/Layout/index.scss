@@ -1,0 +1,12 @@
+.layout {
+    .top {
+      position: fixed;
+      top: 0;
+      bottom: 50px;
+    }
+    .bottom {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
+  }
