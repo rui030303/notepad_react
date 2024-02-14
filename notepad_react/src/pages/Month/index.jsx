@@ -1,7 +1,13 @@
-import { NavBar, DatePicker } from 'antd-mobile'
+import { NavBar, DatePicker, Toast } from 'antd-mobile'
+import { useState } from 'react'
 import './index.scss'
+import dayjs from 'dayjs'
 
 const Month = () => {
+    // time visible
+    const now = new Date()
+    const [dateVisible, setDateVisible] = useState(false)
+    const [currentDate, setCurrentDate] = useState(()=>{return dayjs(now).format('YYYY-MM')})
   return (
     <div className="monthlyBill">
       <NavBar className="nav" backArrow={false}>
@@ -10,11 +16,11 @@ const Month = () => {
       <div className="content">
         <div className="header">
           {/* 时间切换区域 */}
-          <div className="date">
+          <div className="date" onClick={()=>setDateVisible(!dateVisible)}>
             <span className="text">
-              2023 | March
+              {dayjs(currentDate).format('YYYY-MM')}
             </span>
-            <span className='arrow expand'></span>
+            <span className={dateVisible ? 'arrow' : 'arrow expand'}></span>
           </div>
           {/* 统计区域 */}
           <div className='twoLineOverview'>
@@ -36,8 +42,15 @@ const Month = () => {
             className="kaDate"
             title="记账日期"
             precision="month"
-            visible={false}
-            max={new Date()}
+            visible={dateVisible}
+            max={now}
+            onClose={() => {
+                setDateVisible(false)
+              }}
+            onConfirm={val => {
+                Toast.show(val.toDateString())
+                setCurrentDate(val.toDateString())
+            }}
           />
         </div>
       </div>
