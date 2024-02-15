@@ -4,7 +4,7 @@ import './index.scss'
 import dayjs from 'dayjs'
 import { useSelector } from 'react-redux'
 import _, { filter,reduce } from 'lodash'
-import DailyBill from './component'
+import DailyBill from './component/DailyBill'
 
 const Month = () => {
     const now = new Date()
