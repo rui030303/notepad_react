@@ -4,27 +4,37 @@ import './index.scss'
 import dayjs from 'dayjs'
 import { useSelector } from 'react-redux'
 import _, { filter,reduce } from 'lodash'
+import DailyBill from './component'
 
 const Month = () => {
-    //get data
-    const billList = useSelector(state=>state.billStore.billList)
-    const monthGroup = useMemo(()=>{
-        return _.groupBy(billList,(item)=>dayjs((item.date)).format('YYYY-MM'))
-    },[billList])
-
- 
-    // time visible
     const now = new Date()
     const [dateVisible, setDateVisible] = useState(false)
     const [currentDate, setCurrentDate] = useState(()=>{return dayjs(now).format('YYYY-MM')})
     const [currentMonthList,setCurrentMonthList] = useState([])
+    
+
+    //get data
+    const billList = useSelector(state=>state.billStore.billList)
+
+    //create monthGroup, the billList is grouped by month 
+    const monthGroup = useMemo(()=>{
+      return _.groupBy(billList,(item)=>dayjs((item.date)).format('YYYY-MM'))
+    },[billList])
+
+    //create dayGroup, the monthGroup is grouped by month 
+    const dayGroup = useMemo(()=>{
+      return _.groupBy(currentMonthList, (item)=>dayjs(item.date).format('YYYY-MM-DD'))
+    },[currentMonthList])
+
     const onConfirm = (val)=>{
         setCurrentDate(val.toDateString())
         const currentMonthGroup = monthGroup[dayjs(val).format('YYYY-MM')]
         setCurrentMonthList(currentMonthGroup)
+        console.log(dayGroup)
     }
+
+    //calculate
     const monthResult = useMemo(()=>{
-      //calculate
       if (currentMonthList){
       const income = currentMonthList.filter(item=>item.type === 'income').reduce((a,c)=>a+c.money, 0)
       const pay = currentMonthList.filter(item=>item.type === 'pay').reduce((a,c)=>a+c.money, 0)
@@ -32,7 +42,6 @@ const Month = () => {
       return {income, pay, balance}}
       else{return {income:0, pay:0, balance:0}}
     },[currentMonthList])
-
 
     useEffect(()=>{
       const nowDate = dayjs(now).format('YYYY-MM')
@@ -83,6 +92,9 @@ const Month = () => {
             }}
           />
         </div>
+        {Object.keys(dayGroup).map((key)=>{
+          return <DailyBill key={key} date={key} billList = {dayGroup[key]}/>
+        })}
       </div>
     </div >
   )
