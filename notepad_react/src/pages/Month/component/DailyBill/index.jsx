@@ -1,9 +1,11 @@
 import classNames from 'classnames'
 import './index.scss'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
+import Icon from '../../../../component/Icon'
 
 const DailyBill = ({date,billList}) => {
     //calculate
+    const [listVisible, setListVisible] = useState(true)
     const dayResult = useMemo(()=>{
         if (billList){
         const income = billList.filter(item=>item.type === 'income').reduce((a,c)=>a+c.money, 0)
@@ -16,6 +18,8 @@ const DailyBill = ({date,billList}) => {
     <div className={classNames('dailyBill')}>
       <div className="header">
         <div className="dateIcon">
+          <span className="date">{'03月23日'}</span>
+          <span className={classNames(listVisible ? 'arrow' : 'arrow expand')} onClick={()=>setListVisible(!listVisible)}></span>
         </div>
         <div className="oneLineOverview">
           <div className="pay">
@@ -33,10 +37,11 @@ const DailyBill = ({date,billList}) => {
           </div>
         </div>
         {/* 单日列表 */}
-        <div className="billList">
+        <div className="billList" style={{display:listVisible ? 'block' : 'none'}}>
           {billList.map(item => {
             return (
               <div className="bill" key={item.id}>
+                <Icon name = {item.useFor}></Icon>
                 <div className="detail">
                   <div className="billType">{item.useFor}</div>
                 </div>
