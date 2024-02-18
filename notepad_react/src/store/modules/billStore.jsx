@@ -20,14 +20,14 @@ const billStore = createSlice(
 const {setBillList, addBillList} = billStore.actions
 const fetchBillList = ()=>{
     return async (dispatch)=>{
-        const res = await axios.get("http://localhost:8888/ka")
+        const res = await axios.get("https://my-json-server.typicode.com/rui030303/notepad_API/ka")
         dispatch(setBillList(res.data))
     }
 }
 
 const uploadBillList= (data)=>{
     return async(dispatch)=>{
-        const res = await axios.post("http://localhost:8888/ka", data)
+        const res = await axios.post("https://my-json-server.typicode.com/rui030303/notepad_API/ka", data)
         dispatch(addBillList(res.data))
     }
 }
