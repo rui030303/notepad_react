@@ -18,7 +18,7 @@ const DailyBill = ({date,billList}) => {
     <div className={classNames('dailyBill')}>
       <div className="header">
         <div className="dateIcon">
-          <span className="date">{'03月23日'}</span>
+          <span className="date">{date}</span>
           <span className={classNames(listVisible ? 'arrow' : 'arrow expand')} onClick={()=>setListVisible(!listVisible)}></span>
         </div>
         <div className="oneLineOverview">
